@@ -16,17 +16,14 @@
 package guru.zoroark.ratelimit
 
 import guru.zoroark.ratelimit.RateLimit.Configuration
-import io.ktor.application.*
-import io.ktor.features.origin
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.ApplicationRequest
-import io.ktor.request.header
-import io.ktor.response.ApplicationResponse
-import io.ktor.response.header
-import io.ktor.response.respondText
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import io.ktor.util.AttributeKey
 import io.ktor.util.pipeline.PipelineContext
 import kotlinx.coroutines.Dispatchers
@@ -193,7 +190,7 @@ public class RateLimit(configuration: Configuration) {
      * Feature companion object for the rate limiting feature
      */
     public companion object Feature :
-        ApplicationFeature<ApplicationCallPipeline, Configuration, RateLimit> {
+        BaseApplicationPlugin<ApplicationCallPipeline, Configuration, RateLimit> {
         override val key: AttributeKey<RateLimit> = AttributeKey("RateLimit")
 
         override fun install(
@@ -292,7 +289,7 @@ public fun Route.rateLimited(
             RouteSelectorEvaluation.Constant
     })
     // Rate limiting feature object
-    val rateLimiting = application.feature(RateLimit)
+    val rateLimiting = application.plugin(RateLimit)
     // Generate a key for this route
     val arr = ByteArray(64)
     rateLimiting.random.nextBytes(arr)
