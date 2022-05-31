@@ -1,5 +1,5 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.5.30'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id "com.github.hierynomus.license" version "0.16.1"
     id "com.github.ben-manes.versions" version "0.39.0"
     id 'java-library'
@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'guru.zoroark'
-version '0.0.2'
+version '0.0.3'
 
 repositories {
     mavenCentral()
@@ -18,13 +18,13 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.slf4j:slf4j-api:1.7.32"
-    implementation "io.ktor:ktor-server-core:1.6.3"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1"
+    implementation "io.ktor:ktor-server-core:2.0.2"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2"
 
     testImplementation "org.jetbrains.kotlin:kotlin-test"
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    testImplementation "io.ktor:ktor-server-test-host:1.6.3"
+    testImplementation "io.ktor:ktor-server-test-host:2.0.2"
 }
 
 test {
