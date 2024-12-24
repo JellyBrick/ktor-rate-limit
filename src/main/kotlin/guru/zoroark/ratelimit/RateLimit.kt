@@ -210,7 +210,7 @@ public class RateLimit(configuration: Configuration) {
     internal suspend fun handleRateLimitedCall(
         limit: Long?,
         timeBeforeReset: Long?,
-        context: PipelineContext<Unit, ApplicationCall>,
+        context: PipelineContext<Unit, PipelineCall>,
         fullKeyProcessor: suspend (ByteArray) -> String
     ) = with(context.call) {
         // Initialize values
@@ -282,10 +282,10 @@ public fun Route.rateLimited(
 ): Route {
     // Create the route
     val rateLimitedRoute = createChild(object : RouteSelector() {
-        override fun evaluate(
+        override suspend fun evaluate(
             context: RoutingResolveContext,
             segmentIndex: Int
-        ) =
+        ): RouteSelectorEvaluation =
             RouteSelectorEvaluation.Constant
     })
     // Rate limiting feature object
@@ -294,7 +294,7 @@ public fun Route.rateLimited(
     val arr = ByteArray(64)
     rateLimiting.random.nextBytes(arr)
     // Intercepting every call and checking the rate limit
-    rateLimitedRoute.intercept(ApplicationCallPipeline.Features) {
+    rateLimitedRoute.intercept(ApplicationCallPipeline.ApplicationPhase.Plugins) {
         rateLimiting.handleRateLimitedCall(
             limit,
             timeBeforeReset?.toMillis(),
